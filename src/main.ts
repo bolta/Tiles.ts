@@ -36,8 +36,9 @@ const colorGen = new RandomWalkColorGenerator();
 const canvasPolygon = Polygon.rect(xy(0, 0), canvasSize);
 // const tiles = lrtb(tileSize)(canvasPolygon);
 const tiles1 = lrtb({ x: 200, y: 200 })(canvasPolygon);
-const tiles2 = tiles1.flatMap(lrtb(tileSize));
-tiles2.forEach(tile => {
+const tiles2 = tiles1.concatMap(lrtb(tileSize));
+// TODO collect せずに回したい
+tiles2.collect().forEach(tile => {
 	const col = colorGen.nextColor();
 	ctx.fillStyle = col.toCssColor();
 	ctx.strokeStyle = col.multiply(.8).toCssColor();

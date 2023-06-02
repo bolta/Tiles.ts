@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/lodash": "^4.14.194",
     "canvas": "^2.11.2",
+    "lazy-sequences": "^2.0.0",
     "lodash": "^4.17.21",
     "polygons-intersect": "^1.0.3",
     "ts-node": "^10.9.1",
