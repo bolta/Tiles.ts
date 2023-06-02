@@ -9,18 +9,21 @@ import { RandomWalkColorGenerator } from './color/color_generator';
 import { lrtb } from './divider/matrix';
 import { renderToNewCanvas } from './renderer';
 import { composite } from './divider/composite';
+import { Spec } from './spec';
 
-const spec = {
+
+const spec: Spec = {
 	size: xy(800, 600),
 
 	divider: composite([
 		lrtb({ x: 200, y: 200 }),
 		lrtb({ x:   8, y:   8 }),
 	]),
+
+	colors: new RandomWalkColorGenerator(),
 };
 
-const colorGen = new RandomWalkColorGenerator();
-const canvas = renderToNewCanvas(spec.size, spec.divider, colorGen);
+const canvas = renderToNewCanvas(spec.size, spec.divider, spec.colors);
 
 (async () => {
 	await writeFile("image.png", canvas.toBuffer());
