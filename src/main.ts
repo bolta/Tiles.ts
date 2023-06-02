@@ -9,6 +9,7 @@ import polygonsIntersect from 'polygons-intersect';
 import { Polygon, polygon, Vec2d, xy } from './polygon';
 import { RandomWalkColorGenerator } from './color/color_generator';
 import { lrtb } from './divider/matrix';
+import { Divider } from './divider/divider';
 
 const fillPolygon = (ctx: CanvasRenderingContext2D, p: Polygon) => {
 	const vs = p.vertices;
@@ -23,9 +24,20 @@ const fillPolygon = (ctx: CanvasRenderingContext2D, p: Polygon) => {
 	ctx.stroke();
 };
 
-const canvasSize = xy(800, 600);
+const composite: (dividers: Divider[]) => Divider = dividers =>
+		// TODO 親をはみ出さないよう clip する
+		dividers.reduce((accum, div) => (poly: Polygon) => accum(poly).concatMap(div));
 
-const canvas = createCanvas(canvasSize.x, canvasSize.y);
+const spec = {
+	size: xy(800, 600),
+
+	divider: composite([
+		lrtb({ x: 200, y: 200 }),
+		lrtb({ x:   8, y:   8 }),
+	]),
+};
+
+const canvas = createCanvas(spec.size.x, spec.size.y);
 const ctx = canvas.getContext("2d");
 ctx.lineWidth = 1;
 
@@ -33,12 +45,10 @@ const tileSize = { x: 8, y: 8 };
 
 const colorGen = new RandomWalkColorGenerator();
 
-const canvasPolygon = Polygon.rect(xy(0, 0), canvasSize);
-// const tiles = lrtb(tileSize)(canvasPolygon);
-const tiles1 = lrtb({ x: 200, y: 200 })(canvasPolygon);
-const tiles2 = tiles1.concatMap(lrtb(tileSize));
+const canvasPolygon = Polygon.rect(xy(0, 0), spec.size);
+const tiles = spec.divider(canvasPolygon);
 // TODO collect せずに回したい
-tiles2.collect().forEach(tile => {
+tiles.collect().forEach(tile => {
 	const col = colorGen.nextColor();
 	ctx.fillStyle = col.toCssColor();
 	ctx.strokeStyle = col.multiply(.8).toCssColor();
