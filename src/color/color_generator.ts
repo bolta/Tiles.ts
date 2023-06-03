@@ -1,21 +1,28 @@
 import { RgbColor } from './rgb_color';
 import { limit } from '../common';
+import seedrandom, { PRNG } from 'seedrandom';
+
 
 export interface ColorGenerator {
+	initialize(): void;
 	nextColor(): RgbColor;
 }
 
 export class RandomWalkColorGenerator implements ColorGenerator {
+	rng: PRNG;
+	current: RgbColor;
 
-	current: RgbColor; // = new RgbColor(Math.random(), Math.random(), Math.random());
+	constructor(params: { seed: string }) {
+		this.rng = seedrandom(params.seed);
+		this.initialize();
+	}
 
-	constructor() {
-		// TODO 乱数生成器をフィールドに持つ
-		this.current = new RgbColor(Math.random(), Math.random(), Math.random());
+	initialize(): void {
+		this.current = new RgbColor(this.rng(), this.rng(), this.rng());
 	}
 
 	nextColor(): RgbColor {
-		this.current = this.current.map(c => limit(0, c + Math.random() * 0.1 - 0.05, 1));
+		this.current = this.current.map(c => limit(0, c + this.rng() * 0.1 - 0.05, 1));
 
 		return this.current;
 	}

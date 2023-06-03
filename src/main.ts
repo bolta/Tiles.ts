@@ -20,7 +20,7 @@ const spec: Spec = {
 		lrtb({ x:   8, y:   8 }),
 	]),
 
-	colors: new RandomWalkColorGenerator(),
+	colors: new RandomWalkColorGenerator({ seed: 'hello.' }),
 };
 
 const canvas = renderToNewCanvas(spec.size, spec.divider, spec.colors);
