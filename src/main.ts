@@ -3,30 +3,22 @@ import { promisify } from 'util';
 import { exec as exec_ } from 'child_process';
 const writeFile = promisify(fs.writeFile);
 const exec = promisify(exec_);
-import polygonsIntersect from 'polygons-intersect';
-import { xy } from './polygon';
-import { RandomWalkColorGenerator } from './color/color_generator';
-import { lrtb } from './divider/matrix';
 import { renderToNewCanvas } from './renderer';
-import { composite } from './divider/composite';
 import { Spec } from './spec';
 
-
-const spec: Spec = {
-	size: xy(800, 600),
-
-	divider: composite([
-		lrtb({ x: 200, y: 200 }),
-		lrtb({ x:   8, y:   8 }),
-	]),
-
-	colors: new RandomWalkColorGenerator({ seed: 'hello.' }),
-};
-
-const canvas = renderToNewCanvas(spec.size, spec.divider, spec.colors);
-
 (async () => {
-	await writeFile("image.png", canvas.toBuffer());
-	await exec('cmd.exe /c start image.png');
+	// 絶対パスにしないと解決されない場合あり
+	const path = fs.realpathSync(process.argv[2]);
+	const spec: Spec = (await import(path)).spec;
+
+	const canvas = renderToNewCanvas(spec.size, spec.divider, spec.colors);
+
+	const outPath = path.replace(/\.[^.]*$/, '.png');
+	if (fs.existsSync(outPath)) {
+		console.log(`${outPath} already exists.`);
+	} else {
+		await writeFile(outPath, canvas.toBuffer());
+	}
+	await exec(`cmd.exe /c start ${outPath}`);
 })();
 

@@ -9,14 +9,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/lodash": "^4.14.194",
-    "@types/seedrandom": "^3.0.5",
     "canvas": "^2.11.2",
     "lazy-sequences": "^2.0.0",
     "lodash": "^4.17.21",
     "polygons-intersect": "^1.0.3",
     "seedrandom": "^3.0.5",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.194",
+    "@types/polygons-intersect": "^1.0.0",
+    "@types/seedrandom": "^3.0.5",
+    "@types/uuid": "^9.0.1"
   }
 }
