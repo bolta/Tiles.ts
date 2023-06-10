@@ -14,11 +14,15 @@ export class RandomWalkColorGenerator implements ColorGenerator {
 
 	constructor(params: { seed: string }) {
 		this.rng = seedrandom(params.seed);
-		this.initialize();
+		this.current = this.initialColor();
+		console.log(this.current);
+	}
+	private initialColor(): RgbColor {
+		return new RgbColor(this.rng(), this.rng(), this.rng());
 	}
 
 	initialize(): void {
-		this.current = new RgbColor(this.rng(), this.rng(), this.rng());
+		this.current = this.initialColor();
 	}
 
 	nextColor(): RgbColor {

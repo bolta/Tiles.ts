@@ -1,7 +1,7 @@
 import { Polygon, Rect, Vec2d, xy } from '../polygon';
 import { range } from '../common';
 
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { Seq } from 'lazy-sequences';
 
 type Index2d = { x: number, y: number };
