@@ -10,7 +10,7 @@
 		// "runtimeExecutable": "wsl",
 		// "runtimeArgs": ["--", "/home/bolta/.nvm/versions/node/v16.15.1/bin/npx", "ts-node"],
   
-		"args": ["src/main.ts", ],
+		"args": ["src/main.ts", "atelier/20230603_165832/20230603_165832.20230610_134014.ts"],
 		
 		"cwd": "${workspaceRoot}",
 		"internalConsoleOptions": "openOnSessionStart",
