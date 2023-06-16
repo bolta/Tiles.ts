@@ -12,3 +12,15 @@ export const limit = (min: number, val: number, max: number) => Math.min(Math.ma
 export const range = (start: number, end: number) => start < end
 		? Seq.fromRange(start, end - 1)
 		: Seq.empty<number>();
+
+/**
+ * next() が undefined を返すまで呼び出し続ける Seq を生成する。
+ * undefined は結果に含まれない。
+ * T は undefined であってはならない
+ * @param next
+ * @returns 
+ */
+export const generate = <T>(next: () => T | undefined): Seq<T> =>
+		Seq.iterate(next, undefined)
+		.drop(1)
+		.takeWhile(e => e !== undefined) as Seq<T>;

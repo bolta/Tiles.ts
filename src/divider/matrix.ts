@@ -1,5 +1,5 @@
 import { Polygon, Rect, Vec2d, xy } from '../polygon';
-import { range } from '../common';
+import { generate, range } from '../common';
 
 import * as _ from 'lodash';
 import { Seq } from 'lazy-sequences';
@@ -44,15 +44,20 @@ export const scatter = ({
 	return matrix({
 		tileSize,
 		arrangeTiles: ({ ix: sizeX, iy: sizeY }) => {
-			const nextYs = Array(sizeX).fill(sizeY - 1);
-			return Seq.iterate(() => {
+			const nextYs: number[] = Array(sizeX).fill(sizeY - 1);
+			let countDone = 0;
+
+			return generate(() => {
+				if (countDone >= sizeX * sizeY) return undefined;
 				const ix = Math.floor(rng() * sizeX);
 				const iy = nextYs[ix];
-				if (nextYs[ix] >= 0) -- nextYs[ix];
+				if (nextYs[ix] >= 0) {
+					-- nextYs[ix];
+					++ countDone;
+				}
 				return { ix, iy };
-			}, /* dummy */ { ix: 0, iy: 0 })
-					.filter(({ iy }) => iy >= 0)
-					.take(sizeX * sizeY);
+			})
+			.filter(({ iy }) => iy >= 0);
 		},
 		makeTile: makeRectTile,
 	});
