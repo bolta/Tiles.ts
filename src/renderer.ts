@@ -4,28 +4,6 @@ import { Divider } from "./divider/divider";
 import { Polygon, polygon, Vec2d, xy } from "./polygon";
 import * as _ from 'lodash';
 
-import {
-	Polygon as CPolygon,
-	intersection,
-	MultiPolygon,
-} from 'polygon-clipping';
-
-const intersect = (lhs: Polygon, rhs: Polygon): Polygon[] => {
-	const toArrays = poly => poly.vertices.map(({ x, y }) => [x, y]);
-	const toPolygon = (arrays: number[][]) => polygon(arrays.map(([x, y]) => xy(x, y)));
-
-	const result: MultiPolygon = intersection([toArrays(lhs)], [toArrays(rhs)]);
-
-	return result.map((p: CPolygon) => {
-		// type CPolygon = Ring[]
-		// とりあえず先頭のものだけ（あれば）処理する。穴あきには未対応と思われる
-		if (p.length === 0) return polygon([]);
-
-		return toPolygon(p[0]);
-	});
-}
-
-
 const fillPolygon = (ctx: CanvasRenderingContext2D, p: Polygon) => {
 	const vs = p.vertices;
 	if (vs.length === 0) return;
@@ -45,13 +23,7 @@ export const renderToNewCanvas = (size: Vec2d, divider: Divider, colorGen: Color
 	ctx.lineWidth = 1;
 	const canvasPolygon = Polygon.rect(xy(0, 0), size);
 
-	// const tiles = divider(canvasPolygon);
-
-	// 切り抜き実験
-	const clip = new Polygon([xy(400, 100), xy(100, 500), xy(700, 500)]);
-	const tiles = divider(canvasPolygon)
-			.concatMap(tile => intersect(tile, clip))
-			.filter(tile => tile.vertices.length >= 3);
+	const tiles = divider(canvasPolygon);
 
 	// TODO collect せずに回したい
 	tiles.collect().forEach(tile => {
