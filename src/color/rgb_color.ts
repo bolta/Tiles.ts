@@ -25,8 +25,8 @@ export class RgbColor {
 	toCssColor() {
 		return `rgb(${convertComponent(this.r)}, ${convertComponent(this.g)}, ${convertComponent(this.b)})`;
 	}
-
-
 }
+
+export const rgb = (r: number, g: number, b: number) => new RgbColor(r, g, b);
 
 const convertComponent = (c: RgbComponent) => Math.round(c * 255);

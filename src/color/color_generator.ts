@@ -4,30 +4,64 @@ import seedrandom, { PRNG } from 'seedrandom';
 
 
 export interface ColorGenerator {
-	initialize(): void;
 	nextColor(): RgbColor;
 }
 
-export class RandomWalkColorGenerator implements ColorGenerator {
-	rng: PRNG;
-	current: RgbColor;
+export type RgbColorPredicate = (c: RgbColor) => boolean;
+export type ColorMapping = (c: RgbColor) => RgbColor;
 
-	constructor(params: { seed: string }) {
-		this.rng = seedrandom(params.seed);
-		this.current = this.initialColor();
-		console.log(this.current);
+export class RandomWalkColorGenerator implements ColorGenerator {
+	private rng: PRNG;
+	private maxStepSize: number;
+	private stepTimes: number;
+	private constraint: RgbColorPredicate;
+	private effect: ColorMapping;
+	private current: RgbColor;
+
+	constructor({
+		seed,
+		maxStepSize = 0.02,
+		stepTimes = 1,
+		constraint = _ => true,
+		effect = c => c,
+	}: {
+		seed: string,
+		maxStepSize?: number,
+		stepTimes?: number,
+		constraint?: RgbColorPredicate,
+		effect?: ColorMapping,
+	}) {
+		this.rng = seedrandom(seed);
+		this.maxStepSize = maxStepSize;
+		this.stepTimes = stepTimes;
+		this.constraint = constraint;
+		this.effect = effect;
+		this.current = this.makeColorInConstraint(() => this.initialColor());
 	}
 	private initialColor(): RgbColor {
 		return new RgbColor(this.rng(), this.rng(), this.rng());
 	}
 
-	initialize(): void {
-		this.current = this.initialColor();
+	nextColor(): RgbColor {
+		const result = this.current;
+		for (let i = 0; i < this.stepTimes; ++i) {
+			this.current = this.makeColorInConstraint(() =>
+					this.current.map(c => limit(0, c + this.rng() * this.maxStepSize - this.maxStepSize / 2, 1)));
+		}
+
+		return this.effect(result);
 	}
 
-	nextColor(): RgbColor {
-		this.current = this.current.map(c => limit(0, c + this.rng() * 0.1 - 0.05, 1));
-
-		return this.current;
+	/**
+	 * コールバックが生成した色が制約を満たすまで生成を繰り返す
+	 * @param makeColor 色を生成するコールバック。実行のたびに（乱数などで）結果が変わるものであること
+	 * @returns 
+	 */
+	private makeColorInConstraint(makeColor: () => RgbColor): RgbColor {
+		while (true) {
+			const c = makeColor();
+			if (this.constraint(c)) return c;
+		}
 	}
 }
+
