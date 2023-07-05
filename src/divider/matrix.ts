@@ -93,3 +93,41 @@ const makeRectTile = (rect: Rect, tileSize: Vec2d, { ix, iy }: Index2d) => Polyg
 		xy(rect.leftTop.x + ix * tileSize.x, rect.leftTop.y + iy * tileSize.y),
 		xy(rect.leftTop.x + ix * tileSize.x + tileSize.x, rect.leftTop.y + iy * tileSize.y + tileSize.y));
 
+export type SortKeyMakerContext = {
+	tileCountXy: Index2d,
+	// 他にも必要なものがあれば追加
+};
+
+export type SortKeyMaker =
+		(context: SortKeyMakerContext) =>
+		(indexAndTile: { index: Index2d, tile: Polygon }) => number
+
+export const matrix2 = ({
+	tileSize,
+	makeSortKey,
+	makeTile = makeRectTile,
+}: {
+	tileSize: Vec2d,
+	makeSortKey: SortKeyMaker,
+	makeTile?: (rect: Rect, tileSize: Vec2d, index: Index2d) => Polygon,
+}) => (parent: Polygon) => {
+	const rect = parent.circumscribedRect();
+	const tileCountXy = {
+		ix: divByTiles(rect.rightBottom.x - rect.leftTop.x, tileSize.x),
+		iy: divByTiles(rect.rightBottom.y - rect.leftTop.y, tileSize.y),
+	};
+
+	// 全ての index を生成すればよいので、常に lrtb でよい
+	const idxXys = arrangeLrtb(tileCountXy);
+
+	// index に対応するタイルを生成する。元の index も捨てずにタプルにする
+	const idxsAndTiles = idxXys.map(index => ({
+		index,
+		tile: makeTile(rect, tileSize, index),
+	}));
+
+	// index かタイルの幾何学的特徴、どちらでも
+	const idxsAndTilesSorted = _.sortBy(idxsAndTiles.collect(), makeSortKey({ tileCountXy }));
+
+	return new Seq(idxsAndTilesSorted).map(({ tile }) => tile);
+}
