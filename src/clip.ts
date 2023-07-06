@@ -4,7 +4,7 @@ import { polygon, Polygon, Vec2d, xy } from './polygon';
 import * as pc from 'polygon-clipping';
 
 export const intersect = (lhs: Polygon, rhs: Polygon): Polygon[] => {
-	const toArrays = poly => poly.vertices.map(({ x, y }) => [x, y]);
+	const toArrays = (poly: Polygon): [number, number][] => poly.vertices.map(({ x, y }: Vec2d) => [x, y]);
 	const toPolygon = (arrays: number[][]) => polygon(arrays.map(([x, y]) => xy(x, y)));
 
 	let result: pc.MultiPolygon;
