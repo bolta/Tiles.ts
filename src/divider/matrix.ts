@@ -93,6 +93,23 @@ const makeRectTile = (rect: Rect, tileSize: Vec2d, { ix, iy }: Index2d) => Polyg
 		xy(rect.leftTop.x + ix * tileSize.x, rect.leftTop.y + iy * tileSize.y),
 		xy(rect.leftTop.x + ix * tileSize.x + tileSize.x, rect.leftTop.y + iy * tileSize.y + tileSize.y));
 
+
+export const makeHexTile = (rect: Rect, tileSize: Vec2d, { ix, iy }: Index2d) => {
+	const origin = xy(
+			rect.leftTop.x + tileSize.x * ix /* * 3 / 4*/,
+			rect.leftTop.y + tileSize.y * (iy - (ix % 2 === 1 ? 0.5 : 0)))
+	const sideLenX = tileSize.x * 2 / 3;
+
+	return new Polygon([
+		origin,
+		xy(origin.x + sideLenX, origin.y),
+		xy(origin.x + sideLenX * 3 / 2, origin.y + tileSize.y / 2),
+		xy(origin.x + sideLenX, origin.y + tileSize.y),
+		xy(origin.x, origin.y + tileSize.y),
+		xy(origin.x - sideLenX / 2, origin.y + tileSize.y / 2),
+	]);
+};
+
 export type SortKeyMakerContext = {
 	tileCountXy: Index2d,
 	// 他にも必要なものがあれば追加
