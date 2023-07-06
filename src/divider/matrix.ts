@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { Seq } from 'lazy-sequences';
 import seedrandom from 'seedrandom';
 
-type Index2d = { ix: number, iy: number };
+export type Index2d = { ix: number, iy: number };
 
 const divByTiles = (wholeLen: number, tileLen:number) => Math.floor(((wholeLen - 1) / tileLen)) + 1;
 
@@ -63,8 +63,7 @@ export const scatter = ({
 	});
 }
 
-
-const matrix = ({
+export const matrix = ({
 	tileSize,
 	arrangeTiles,
 	makeTile,
