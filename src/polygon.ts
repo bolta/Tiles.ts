@@ -9,6 +9,7 @@ export class Vec2d {
 
 	add(that: Vec2d) { return xy(this.x + that.x, this.y + that.y); }
 	subtract(that: Vec2d) { return xy(this.x - that.x, this.y - that.y); }
+	multiply(k: number) { return xy(k * this.x, k * this.y); }
 	equals(that: Vec2d) { return this.x === that.x && this.y === that.y; }
 }
 
