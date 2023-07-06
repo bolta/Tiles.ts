@@ -126,7 +126,7 @@ export const matrix2 = ({
 		tile: makeTile(rect, tileSize, index),
 	}));
 
-	// index かタイルの幾何学的特徴、どちらでも
+	// index かタイルの幾何学的特徴、どちらでもソートできる
 	const idxsAndTilesSorted = _.sortBy(idxsAndTiles.collect(), makeSortKey({ tileCountXy }));
 
 	return new Seq(idxsAndTilesSorted).map(({ tile }) => tile);
