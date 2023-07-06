@@ -1,6 +1,6 @@
 import Seq from "lazy-sequences";
 import { cut as cut_ } from "../clip";
-import { Line } from "../line";
+import { Line } from "../geom/line";
 import { Polygon } from "../polygon";
 
 export const cut = ({ line } : {line: Line }) => (poly: Polygon) => {

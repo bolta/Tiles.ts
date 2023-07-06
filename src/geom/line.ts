@@ -1,4 +1,4 @@
-import { Vec2d, xy } from "./polygon";
+import { Vec2d, xy } from "../polygon";
 
 export class Line {
 	a: number;
