@@ -1,5 +1,5 @@
 import { intersect } from "../clip";
-import { Polygon } from "../polygon";
+import { Polygon } from "../geom/polygon";
 import { Divider } from "./divider";
 
 export const composite: (dividers: Divider[]) => Divider =

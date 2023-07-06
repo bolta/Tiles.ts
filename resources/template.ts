@@ -1,4 +1,4 @@
-import { xy } from '../src/polygon';
+import { xy } from '../src/geom/polygon';
 import { RandomWalkColorGenerator } from '../src/color/color_generator';
 import { lrtb } from '../src/divider/matrix';
 import { composite } from '../src/divider/composite';

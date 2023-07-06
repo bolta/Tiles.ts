@@ -1,4 +1,4 @@
-import { Vec2d, xy } from "../polygon";
+import { Vec2d, xy } from "./polygon";
 
 export class Polar2d {
 	public r: number;

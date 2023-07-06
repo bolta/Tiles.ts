@@ -1,7 +1,7 @@
 import { CanvasRenderingContext2D, createCanvas } from "canvas";
 import { ColorGenerator } from "./color/color_generator";
 import { Divider } from "./divider/divider";
-import { Polygon, polygon, Vec2d, xy } from "./polygon";
+import { Polygon, polygon, Vec2d, xy } from "./geom/polygon";
 import * as _ from 'lodash';
 
 const fillPolygon = (ctx: CanvasRenderingContext2D, p: Polygon) => {

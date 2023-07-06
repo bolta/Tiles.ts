@@ -1,4 +1,4 @@
-import { Polygon, Rect, Vec2d, xy } from '../polygon';
+import { Polygon, Rect, Vec2d, xy } from '../geom/polygon';
 import { generate, range } from '../common';
 
 import * as _ from 'lodash';

@@ -1,4 +1,4 @@
-import { Polygon } from '../polygon';
+import { Polygon } from '../geom/polygon';
 
 import { Seq } from 'lazy-sequences';
 

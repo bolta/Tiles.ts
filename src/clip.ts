@@ -1,5 +1,5 @@
 import { crossingPoint, Line } from './geom/line';
-import { polygon, Polygon, Vec2d, xy } from './polygon';
+import { polygon, Polygon, Vec2d, xy } from './geom/polygon';
 
 import * as pc from 'polygon-clipping';
 
